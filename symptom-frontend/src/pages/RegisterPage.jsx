@@ -25,11 +25,14 @@ export default function RegisterPage() {
   }
 
   if (done) return (
-    <AuthForm title="Check your email" subtitle="Verification link sent to your inbox">
+    <AuthForm title="You're all set! 🎉" subtitle="Welcome to SymptomAI">
       <div style={{ textAlign:'center', padding:'8px 0 16px' }}>
-        <div style={{ fontSize:48, marginBottom:16 }}>📬</div>
-        <p style={{ fontSize:13, color:'var(--text-muted)', lineHeight:1.6 }}>Click the link to activate your account. Expires in 24 hours.</p>
-        <Link to="/login" style={{ display:'inline-block', marginTop:24, color:'var(--accent)', fontSize:13, fontWeight:600, textDecoration:'none' }}>Back to Login →</Link>
+        <div style={{ fontSize:48, marginBottom:16 }}>✅</div>
+        <p style={{ fontSize:13, color:'var(--text-muted)', lineHeight:1.6 }}>
+          Your account has been created successfully.<br/>
+          Start checking symptoms, finding doctors, and managing your health — all in one place.
+        </p>
+        <Link to="/login" style={{ display:'inline-block', marginTop:24, color:'var(--accent)', fontSize:13, fontWeight:600, textDecoration:'none' }}>Go to Login →</Link>
       </div>
     </AuthForm>
   )

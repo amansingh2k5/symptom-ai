@@ -1,15 +1,7 @@
-/**
- * controllers/bookingController.js
- *
- * Create, list, and cancel doctor appointments.
- * Sends a Nodemailer confirmation email on every new booking.
- */
-
 const Booking = require("../models/Booking");
 const { sendBookingConfirmation } = require("../utils/emailService");
 
 // ── Create Booking ────────────────────────────────────────────────────────────
-// POST /api/bookings  (protected)
 const createBooking = async (req, res) => {
   try {
     const { doctor, appointmentDate, appointmentTime, reason } = req.body;
@@ -23,8 +15,10 @@ const createBooking = async (req, res) => {
       status: "confirmed",
     });
 
-    // Send confirmation email — fire & forget (don't block the response)
-    sendBookingConfirmation(req.user, booking)
+    // Populate doctor details so email has name, specialty, hospital
+    const populatedBooking = await Booking.findById(booking._id).populate("doctor");
+
+    sendBookingConfirmation(req.user, populatedBooking)
       .then(() => Booking.findByIdAndUpdate(booking._id, { emailSent: true }))
       .catch(err => console.error("Email send error:", err.message));
 
@@ -35,11 +29,10 @@ const createBooking = async (req, res) => {
 };
 
 // ── Get My Bookings ───────────────────────────────────────────────────────────
-// GET /api/bookings  (protected)
 const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user._id })
-      .sort({ appointmentDate: 1 });   // chronological order
+      .sort({ appointmentDate: 1 });
     res.json({ success: true, bookings });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -47,7 +40,6 @@ const getMyBookings = async (req, res) => {
 };
 
 // ── Cancel Booking ────────────────────────────────────────────────────────────
-// PATCH /api/bookings/:id/cancel  (protected)
 const cancelBooking = async (req, res) => {
   try {
     const booking = await Booking.findOne({ _id: req.params.id, user: req.user._id });
