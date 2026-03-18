@@ -23,7 +23,7 @@ const app = express();
 
 
 // ─────────────────────────────────────────────
-// CORS (FIXED FOR VERCEL + LOCALHOST)
+// CORS
 // ─────────────────────────────────────────────
 
 const allowedOrigins = [
@@ -36,9 +36,7 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
-
       if (allowedOrigins.indexOf(origin) !== -1) {
         callback(null, true);
       } else {
@@ -62,10 +60,9 @@ app.use(express.urlencoded({ extended: true }));
 // Rate Limiters
 // ─────────────────────────────────────────────
 
-// Global limiter — increased to handle cold-start burst requests
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 300,                  // increased from 100 to 300
+  windowMs: 15 * 60 * 1000,
+  max: 300,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -74,10 +71,9 @@ const globalLimiter = rateLimit({
   }
 });
 
-// Auth-specific limiter — stricter for login/register
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 20,                   // 20 auth attempts per 15 min
+  windowMs: 15 * 60 * 1000,
+  max: 20,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
@@ -90,14 +86,11 @@ app.use(globalLimiter);
 
 
 // ─────────────────────────────────────────────
-// Root + Health Check (for Render keep-alive)
+// Health Check
 // ─────────────────────────────────────────────
 
 app.get("/", (req, res) => {
-  res.json({
-    success: true,
-    message: "SymptomAI API is running 🚀"
-  });
+  res.json({ success: true, message: "SymptomAI API is running 🚀" });
 });
 
 app.get("/api/health", (req, res) => {
@@ -113,7 +106,7 @@ app.get("/api/health", (req, res) => {
 // Routes
 // ─────────────────────────────────────────────
 
-app.use("/api/auth", authLimiter, authRoutes);  // auth has its own stricter limiter
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/symptoms", symptomRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/bookings", bookingRoutes);
@@ -138,7 +131,6 @@ app.use((req, res) => {
 
 app.use((err, req, res, next) => {
   console.error("Global Error:", err.stack);
-
   res.status(err.status || 500).json({
     success: false,
     message: err.message || "Internal Server Error"
@@ -150,18 +142,14 @@ app.use((err, req, res, next) => {
 // Database + Server
 // ─────────────────────────────────────────────
 
-const PORT = process.env.PORT || 5000;
-
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => {
-    console.log("✅ MongoDB connected");
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection failed:", err.message));
 
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running on port ${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message);
-    process.exit(1);
-  });
+const PORT = process.env.PORT || 5000;
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+}
+
+module.exports = app;
