@@ -36,7 +36,6 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
-
       // allow requests with no origin (like mobile apps or curl)
       if (!origin) return callback(null, true);
 
@@ -59,14 +58,31 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// Rate limiter (global protection)
+// ─────────────────────────────────────────────
+// Rate Limiters
+// ─────────────────────────────────────────────
 
+// Global limiter — increased to handle cold-start burst requests
 const globalLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 100,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 300,                  // increased from 100 to 300
+  standardHeaders: true,
+  legacyHeaders: false,
   message: {
     success: false,
     message: "Too many requests. Try again later."
+  }
+});
+
+// Auth-specific limiter — stricter for login/register
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 20,                   // 20 auth attempts per 15 min
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: {
+    success: false,
+    message: "Too many login attempts. Please try again after 15 minutes."
   }
 });
 
@@ -74,17 +90,15 @@ app.use(globalLimiter);
 
 
 // ─────────────────────────────────────────────
-// Routes
+// Root + Health Check (for Render keep-alive)
 // ─────────────────────────────────────────────
 
-app.use("/api/auth", authRoutes);
-app.use("/api/symptoms", symptomRoutes);
-app.use("/api/doctors", doctorRoutes);
-app.use("/api/bookings", bookingRoutes);
-app.use("/api/reminders", reminderRoutes);
-
-
-// health check (useful for Render)
+app.get("/", (req, res) => {
+  res.json({
+    success: true,
+    message: "SymptomAI API is running 🚀"
+  });
+});
 
 app.get("/api/health", (req, res) => {
   res.json({
@@ -93,6 +107,17 @@ app.get("/api/health", (req, res) => {
     env: process.env.NODE_ENV
   });
 });
+
+
+// ─────────────────────────────────────────────
+// Routes
+// ─────────────────────────────────────────────
+
+app.use("/api/auth", authLimiter, authRoutes);  // auth has its own stricter limiter
+app.use("/api/symptoms", symptomRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/bookings", bookingRoutes);
+app.use("/api/reminders", reminderRoutes);
 
 
 // ─────────────────────────────────────────────
