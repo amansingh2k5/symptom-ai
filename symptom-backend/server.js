@@ -1,5 +1,3 @@
-
-
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -14,11 +12,9 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const reminderRoutes = require("./routes/reminderRoutes");
 
-
 require("./utils/cronJobs");
 
 const app = express();
-
 
 
 const allowedOrigins = [
@@ -31,10 +27,17 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: function (origin, callback) {
+      
       if (!origin) return callback(null, true);
-      if (allowedOrigins.indexOf(origin) !== -1) {
+
+     
+      const isAllowed = allowedOrigins.includes(origin) || 
+                        (origin.includes("symptom-ai") && origin.endsWith(".vercel.app"));
+
+      if (isAllowed) {
         callback(null, true);
       } else {
+        console.log("Blocked by CORS:", origin);
         callback(new Error("Not allowed by CORS"));
       }
     },
@@ -42,38 +45,27 @@ app.use(
   })
 );
 
-
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-
-
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: 3000,
   standardHeaders: true,
   legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many requests. Try again later."
-  }
+  message: { success: false, message: "Too many requests. Try again later." }
 });
 
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 1000,
   standardHeaders: true,
   legacyHeaders: false,
-  message: {
-    success: false,
-    message: "Too many login attempts. Please try again after 15 minutes."
-  }
+  message: { success: false, message: "Too many login attempts. Please try again after 15 minutes." }
 });
 
 app.use(globalLimiter);
-
 
 
 app.get("/", (req, res) => {
@@ -88,15 +80,11 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-
-
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/symptoms", symptomRoutes);
 app.use("/api/doctors", doctorRoutes);
 app.use("/api/bookings", bookingRoutes);
 app.use("/api/reminders", reminderRoutes);
-
-
 
 
 app.use((req, res) => {
@@ -106,9 +94,6 @@ app.use((req, res) => {
   });
 });
 
-
-
-
 app.use((err, req, res, next) => {
   console.error("Global Error:", err.stack);
   res.status(err.status || 500).json({
@@ -117,18 +102,15 @@ app.use((err, req, res, next) => {
   });
 });
 
-
-
-
-
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => console.log("✅ MongoDB connected"))
   .catch((err) => console.error("❌ MongoDB connection failed:", err.message));
 
 const PORT = process.env.PORT || 5000;
-if (process.env.NODE_ENV !== "production") {
-  app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
-}
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
 
 module.exports = app;
