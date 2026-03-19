@@ -1,6 +1,4 @@
-/**
- * routes/authRoutes.js
- */
+
 const express    = require("express");
 const { body }   = require("express-validator");
 const rateLimit  = require("express-rate-limit");
@@ -11,14 +9,13 @@ const {
 } = require("../controllers/authController");
 const { protect } = require("../middleware/authMiddleware");
 
-// Stricter rate limit for auth endpoints (5 attempts per 15 min)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   message: { success: false, message: "Too many attempts. Try again in 15 minutes." },
 });
 
-// Input validation rules
+
 const registerValidation = [
   body("name").trim().notEmpty().withMessage("Name is required"),
   body("email").isEmail().withMessage("Valid email required"),

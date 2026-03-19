@@ -1,6 +1,4 @@
-/**
- * server.js — Main entry point for SymptomAI Backend
- */
+
 
 const express = require("express");
 const mongoose = require("mongoose");
@@ -16,15 +14,12 @@ const doctorRoutes = require("./routes/doctorRoutes");
 const bookingRoutes = require("./routes/bookingRoutes");
 const reminderRoutes = require("./routes/reminderRoutes");
 
-// start medication reminder cron job
+
 require("./utils/cronJobs");
 
 const app = express();
 
 
-// ─────────────────────────────────────────────
-// CORS
-// ─────────────────────────────────────────────
 
 const allowedOrigins = [
   "http://localhost:3000",
@@ -48,17 +43,12 @@ app.use(
 );
 
 
-// ─────────────────────────────────────────────
-// Middleware
-// ─────────────────────────────────────────────
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 
-// ─────────────────────────────────────────────
-// Rate Limiters
-// ─────────────────────────────────────────────
+
 
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -85,9 +75,6 @@ const authLimiter = rateLimit({
 app.use(globalLimiter);
 
 
-// ─────────────────────────────────────────────
-// Health Check
-// ─────────────────────────────────────────────
 
 app.get("/", (req, res) => {
   res.json({ success: true, message: "SymptomAI API is running 🚀" });
@@ -102,9 +89,6 @@ app.get("/api/health", (req, res) => {
 });
 
 
-// ─────────────────────────────────────────────
-// Routes
-// ─────────────────────────────────────────────
 
 app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/symptoms", symptomRoutes);
@@ -113,9 +97,7 @@ app.use("/api/bookings", bookingRoutes);
 app.use("/api/reminders", reminderRoutes);
 
 
-// ─────────────────────────────────────────────
-// 404 Handler
-// ─────────────────────────────────────────────
+
 
 app.use((req, res) => {
   res.status(404).json({
@@ -125,9 +107,7 @@ app.use((req, res) => {
 });
 
 
-// ─────────────────────────────────────────────
-// Global Error Handler
-// ─────────────────────────────────────────────
+
 
 app.use((err, req, res, next) => {
   console.error("Global Error:", err.stack);
@@ -138,9 +118,8 @@ app.use((err, req, res, next) => {
 });
 
 
-// ─────────────────────────────────────────────
-// Database + Server
-// ─────────────────────────────────────────────
+
+
 
 mongoose
   .connect(process.env.MONGO_URI)

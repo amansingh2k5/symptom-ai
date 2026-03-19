@@ -77,7 +77,7 @@ export default function HistoryPage() {
                     </div>
                   </div>
 
-                  {/* Expanded */}
+                 
                   {isOpen && (
                     <div style={{ marginTop:16, paddingTop:16, borderTop:'1px solid var(--border)' }}>
                       <p style={{ fontSize:11, fontWeight:600, color:'var(--text-muted)', marginBottom:8, textTransform:'uppercase', letterSpacing:'0.05em' }}>Possible Conditions</p>
@@ -106,7 +106,7 @@ export default function HistoryPage() {
         )
       }
 
-      {/* Pagination */}
+     
       {totalPages > 1 && (
         <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:12, marginTop:24 }}>
           <button className="btn-ghost" onClick={() => setPage(p => p-1)} disabled={page === 1} style={{ padding:'8px 14px' }}>

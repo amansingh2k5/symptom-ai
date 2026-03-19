@@ -1,4 +1,4 @@
-// ─── LoginPage.jsx ────────────────────────────────────────────────────────────
+
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Eye, EyeOff, LogIn } from 'lucide-react'

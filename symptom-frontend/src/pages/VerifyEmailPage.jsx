@@ -8,7 +8,7 @@ import { authAPI } from '../services/api'
 export default function VerifyEmailPage() {
   const [searchParams]          = useSearchParams()
   const token                   = searchParams.get('token')
-  const [status, setStatus]     = useState('loading') // 'loading' | 'success' | 'error'
+  const [status, setStatus]     = useState('loading') 
   const [message, setMessage]   = useState('')
 
   useEffect(() => {

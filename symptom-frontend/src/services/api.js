@@ -1,7 +1,4 @@
-/**
- * services/api.js
- * Axios instance
- */
+
 
 import axios from "axios";
 
@@ -15,7 +12,7 @@ const api = axios.create({
   },
 });
 
-// Attach JWT token to every request
+
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem("token");
@@ -29,7 +26,7 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Handle unauthorized responses globally
+
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -42,7 +39,6 @@ api.interceptors.response.use(
   }
 );
 
-/* ================= AUTH ================= */
 
 export const authAPI = {
   register: (data) => api.post("/auth/register", data),
@@ -55,7 +51,7 @@ export const authAPI = {
   updateProfile: (data) => api.put("/auth/profile", data),
 };
 
-/* ================= SYMPTOMS ================= */
+
 
 export const symptomAPI = {
   check: (data) => api.post("/symptoms/check", data),
@@ -63,14 +59,13 @@ export const symptomAPI = {
   deleteLog: (id) => api.delete(`/symptoms/${id}`),
 };
 
-/* ================= DOCTORS ================= */
+
 
 export const doctorAPI = {
   getNearby: (params) => api.get("/doctors/nearby", { params }),
   getDetail: (placeId) => api.get(`/doctors/${placeId}`),
 };
 
-/* ================= BOOKINGS ================= */
 
 export const bookingAPI = {
   create: (data) => api.post("/bookings", data),
@@ -78,7 +73,7 @@ export const bookingAPI = {
   cancel: (id) => api.patch(`/bookings/${id}/cancel`),
 };
 
-/* ================= REMINDERS ================= */
+
 
 export const reminderAPI = {
   create: (data) => api.post("/reminders", data),

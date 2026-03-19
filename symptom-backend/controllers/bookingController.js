@@ -1,7 +1,6 @@
 const Booking = require("../models/Booking");
 const { sendBookingConfirmation } = require("../utils/emailService");
 
-// ── Create Booking ────────────────────────────────────────────────────────────
 const createBooking = async (req, res) => {
   try {
     const { doctor, appointmentDate, appointmentTime, reason } = req.body;
@@ -15,7 +14,7 @@ const createBooking = async (req, res) => {
       status: "confirmed",
     });
 
-    // Populate doctor details so email has name, specialty, hospital
+    
     const populatedBooking = await Booking.findById(booking._id).populate("doctor");
 
     sendBookingConfirmation(req.user, populatedBooking)
@@ -28,7 +27,7 @@ const createBooking = async (req, res) => {
   }
 };
 
-// ── Get My Bookings ───────────────────────────────────────────────────────────
+
 const getMyBookings = async (req, res) => {
   try {
     const bookings = await Booking.find({ user: req.user._id })
@@ -39,7 +38,7 @@ const getMyBookings = async (req, res) => {
   }
 };
 
-// ── Cancel Booking ────────────────────────────────────────────────────────────
+
 const cancelBooking = async (req, res) => {
   try {
     const booking = await Booking.findOne({ _id: req.params.id, user: req.user._id });

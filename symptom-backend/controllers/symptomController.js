@@ -1,19 +1,13 @@
-/**
- * controllers/symptomController.js
- *
- * Connects to OpenAI API to analyze symptoms,
- * saves the result to MongoDB, returns structured JSON to frontend.
- */
+
 
 const OpenAI = require("openai");
 const SymptomLog = require("../models/SymptomLog");
 
-// Initialize OpenAI
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
 
-// ── Check Symptoms via OpenAI ─────────────────────────────────────────────
+
 const checkSymptoms = async (req, res) => {
   try {
     const { tags = [], customText = "" } = req.body;
@@ -130,7 +124,7 @@ Rules:
   }
 };
 
-// ── Get Symptom History ─────────────────────────────────────────────────────
+
 const getHistory = async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1;
@@ -163,7 +157,7 @@ const getHistory = async (req, res) => {
   }
 };
 
-// ── Delete a Symptom Log ────────────────────────────────────────────────────
+
 const deleteLog = async (req, res) => {
   try {
     const log = await SymptomLog.findOne({

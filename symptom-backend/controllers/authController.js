@@ -1,8 +1,3 @@
-/**
- * controllers/authController.js
- *
- * Handles: Register, Login, Forgot/Reset Password
- */
 
 const crypto        = require("crypto");
 const User          = require("../models/User");
@@ -11,8 +6,7 @@ const {
   sendPasswordResetEmail,
 } = require("../utils/emailService");
 
-// ── Register ──────────────────────────────────────────────────────────────────
-// POST /api/auth/register
+
 const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -38,8 +32,7 @@ const register = async (req, res) => {
   }
 };
 
-// ── Login ─────────────────────────────────────────────────────────────────────
-// POST /api/auth/login
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -73,8 +66,7 @@ const login = async (req, res) => {
   }
 };
 
-// ── Verify Email (kept for old users) ────────────────────────────────────────
-// GET /api/auth/verify-email?token=xxx
+
 const verifyEmail = async (req, res) => {
   try {
     const { token } = req.query;
@@ -99,8 +91,7 @@ const verifyEmail = async (req, res) => {
   }
 };
 
-// ── Forgot Password ───────────────────────────────────────────────────────────
-// POST /api/auth/forgot-password
+
 const forgotPassword = async (req, res) => {
   try {
     const { email } = req.body;
@@ -124,8 +115,7 @@ const forgotPassword = async (req, res) => {
   }
 };
 
-// ── Reset Password ────────────────────────────────────────────────────────────
-// POST /api/auth/reset-password
+
 const resetPassword = async (req, res) => {
   try {
     const { token, newPassword } = req.body;
@@ -150,14 +140,12 @@ const resetPassword = async (req, res) => {
   }
 };
 
-// ── Get Profile ───────────────────────────────────────────────────────────────
-// GET /api/auth/me  (protected)
+
 const getMe = async (req, res) => {
   res.json({ success: true, user: req.user });
 };
 
-// ── Update Health Profile ─────────────────────────────────────────────────────
-// PUT /api/auth/profile  (protected)
+
 const updateProfile = async (req, res) => {
   try {
     const { name, healthProfile } = req.body;

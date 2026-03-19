@@ -46,7 +46,7 @@ export default function ProfilePage() {
   return (
     <div className="fade-up" style={{ padding:24, maxWidth:640, margin:'0 auto' }}>
 
-      {/* Avatar Row */}
+      
       <div style={{ display:'flex', alignItems:'center', gap:16, marginBottom:28 }}>
         <div style={{ width:64, height:64, borderRadius:'50%', background:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:22, fontWeight:800, fontFamily:'var(--font-display)', color:'#fff', flexShrink:0 }}>
           {initials}
@@ -61,7 +61,7 @@ export default function ProfilePage() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* Account Info */}
+        
         <GlassCard style={{ marginBottom:16 }}>
           <SectionHeader title="Account Info" />
           <div style={{ display:'flex', flexDirection:'column', gap:14 }}>
@@ -77,7 +77,7 @@ export default function ProfilePage() {
           </div>
         </GlassCard>
 
-        {/* Health Profile */}
+        
         <GlassCard style={{ marginBottom:20 }}>
           <SectionHeader title="Health Profile" />
           <p style={{ fontSize:12, color:'var(--text-muted)', marginBottom:16, marginTop:-8 }}>

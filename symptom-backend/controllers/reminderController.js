@@ -1,12 +1,7 @@
-/**
- * controllers/reminderController.js
- * CRUD for medication reminders. The cron job in utils/cronJobs.js
- * reads these reminders and sends emails automatically.
- */
 
 const Reminder = require("../models/Reminder");
 
-// POST /api/reminders  (protected)
+
 const createReminder = async (req, res) => {
   try {
     const { medicationName, dosage, times, notes } = req.body;
@@ -15,7 +10,7 @@ const createReminder = async (req, res) => {
       user: req.user._id,
       medicationName,
       dosage,
-      times,      // ["08:00", "20:00"]
+      times,     
       notes,
     });
 
@@ -25,7 +20,7 @@ const createReminder = async (req, res) => {
   }
 };
 
-// GET /api/reminders  (protected)
+
 const getReminders = async (req, res) => {
   try {
     const reminders = await Reminder.find({ user: req.user._id }).sort({ createdAt: -1 });
@@ -35,7 +30,7 @@ const getReminders = async (req, res) => {
   }
 };
 
-// PATCH /api/reminders/:id  (protected) — toggle active, update times, etc.
+
 const updateReminder = async (req, res) => {
   try {
     const reminder = await Reminder.findOneAndUpdate(
@@ -50,7 +45,7 @@ const updateReminder = async (req, res) => {
   }
 };
 
-// DELETE /api/reminders/:id  (protected)
+
 const deleteReminder = async (req, res) => {
   try {
     const reminder = await Reminder.findOneAndDelete({ _id: req.params.id, user: req.user._id });

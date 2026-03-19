@@ -1,7 +1,4 @@
-/**
- * models/Reminder.js — Medication reminders.
- * node-cron checks this collection every minute and sends emails.
- */
+
 
 const mongoose = require("mongoose");
 
@@ -14,9 +11,9 @@ const ReminderSchema = new mongoose.Schema(
     },
 
     medicationName: { type: String, required: true },
-    dosage:         { type: String, required: true },   // e.g. "500mg"
+    dosage:         { type: String, required: true },  
 
-    // Schedule: array of times like ["08:00", "14:00", "20:00"]
+ 
     times: {
       type: [String],
       required: true,
@@ -24,7 +21,7 @@ const ReminderSchema = new mongoose.Schema(
 
     isActive: { type: Boolean, default: true },
 
-    // Track last sent to avoid double-sending
+   
     lastSentAt: Date,
 
     notes: String,

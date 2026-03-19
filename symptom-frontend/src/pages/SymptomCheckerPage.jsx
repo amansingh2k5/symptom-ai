@@ -90,7 +90,7 @@ export default function SymptomCheckerPage() {
   return (
     <div style={{ padding: 24, maxWidth: 700, margin: '0 auto' }}>
 
-      {/* Symptom Selector */}
+     
       <GlassCard style={{ marginBottom: 16 }}>
 
         <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>
@@ -138,7 +138,7 @@ export default function SymptomCheckerPage() {
 
       </GlassCard>
 
-      {/* Buttons */}
+     
       <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
 
         <button
@@ -159,7 +159,6 @@ export default function SymptomCheckerPage() {
 
       </div>
 
-      {/* AI RESULT */}
       {result && (
 
         <GlassCard style={{ borderColor: SEV_BORDER[result.severity] || 'var(--border)' }}>
@@ -173,7 +172,7 @@ export default function SymptomCheckerPage() {
             />
           </div>
 
-          {/* Conditions */}
+          
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
 
             {result.conditions?.map((c, i) => (
@@ -216,7 +215,7 @@ export default function SymptomCheckerPage() {
 
           <hr style={{ margin: '18px 0', border: 'none', borderTop: '1px solid var(--border)' }} />
 
-          {/* Medicines */}
+          
           {result.medications?.length > 0 && (
             <div style={{ marginBottom: 18 }}>
               <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 10 }}>
@@ -233,7 +232,7 @@ export default function SymptomCheckerPage() {
             </div>
           )}
 
-          {/* Home Remedies */}
+        
           {result.homeRemedies?.length > 0 && (
             <div style={{ marginBottom: 18 }}>
               <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
@@ -248,7 +247,7 @@ export default function SymptomCheckerPage() {
             </div>
           )}
 
-          {/* Precautions */}
+         
           {result.precautions?.length > 0 && (
             <div style={{ marginBottom: 18 }}>
               <h4 style={{ fontSize: 14, fontWeight: 600, marginBottom: 8 }}>
@@ -263,7 +262,7 @@ export default function SymptomCheckerPage() {
             </div>
           )}
 
-          {/* Doctor Warning */}
+         
           {result.seeDoctorIf?.length > 0 && (
             <div style={{ marginBottom: 18 }}>
               <h4 style={{ fontSize: 14, fontWeight: 600, color: 'var(--red)' }}>
@@ -278,7 +277,7 @@ export default function SymptomCheckerPage() {
             </div>
           )}
 
-          {/* Disclaimer */}
+          
           <div style={{ display: 'flex', gap: 8 }}>
             <AlertTriangle size={12} style={{ color: 'var(--yellow)' }} />
             <p style={{ fontSize: 11 }}>{result.disclaimer}</p>

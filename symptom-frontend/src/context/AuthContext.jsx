@@ -16,7 +16,7 @@ export function AuthProvider({ children }) {
       .then(({ data }) => setUser(data.user))
       .catch(() => logout())
       .finally(() => setLoading(false))
-  }, []) // eslint-disable-line
+  }, []) 
 
   const login = useCallback((userData, jwt) => {
     setUser(userData); setToken(jwt)

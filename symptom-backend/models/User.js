@@ -1,9 +1,4 @@
-/**
- * models/User.js — MongoDB User Schema
- *
- * Stores account info, hashed passwords, and basic health profile.
- * Password is hashed via bcrypt BEFORE saving (pre-save hook below).
- */
+
 
 const mongoose = require("mongoose");
 const bcrypt   = require("bcryptjs");
@@ -28,10 +23,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
-      select: false,               // Never return password in queries by default
+      select: false,               
     },
 
-    // Health profile — filled in on dashboard
+    
     healthProfile: {
       age:            { type: Number },
       gender:         { type: String, enum: ["male", "female", "other"] },
@@ -40,12 +35,12 @@ const UserSchema = new mongoose.Schema(
       existingConditions: [String],
     },
 
-    // Email verification
+    
     isVerified:        { type: Boolean, default: false },
     verifyToken:       String,
     verifyTokenExpiry: Date,
 
-    // Password reset
+   
     resetPasswordToken:  String,
     resetPasswordExpiry: Date,
 
@@ -55,24 +50,18 @@ const UserSchema = new mongoose.Schema(
       default: "user",
     },
   },
-  { timestamps: true }            // adds createdAt, updatedAt automatically
+  { timestamps: true }            
 );
 
-/**
- * Pre-save hook: hash password before every save.
- * Only runs if the password field was modified (e.g., not on profile updates).
- */
+
 UserSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
-  // Salt rounds = 12: good balance of security and speed
+  
   this.password = await bcrypt.hash(this.password, 12);
   next();
 });
 
-/**
- * Instance method: compare plain text password with hashed one.
- * Used during login.
- */
+
 UserSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

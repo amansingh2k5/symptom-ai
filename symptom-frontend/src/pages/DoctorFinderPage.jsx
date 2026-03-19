@@ -6,7 +6,7 @@ import { GlassCard, EmptyState, PageLoader, Spinner } from '../components/ui'
 
 const SPECIALTIES = ['All','General Physician','Cardiologist','Neurologist','Pulmonologist','ENT Specialist']
 
-// ── Booking Modal ─────────────────────────────────────────────────────────────
+
 function BookingModal({ doctor, onClose }) {
   const [form, setForm]       = useState({ appointmentDate:'', appointmentTime:'', reason:'' })
   const [loading, setLoading] = useState(false)
@@ -56,7 +56,6 @@ function BookingModal({ doctor, onClose }) {
   )
 }
 
-// ── Doctor Card ────────────────────────────────────────────────────────────────
 function DoctorCard({ doctor, onBook }) {
   const initials = (doctor.name || 'DR').split(' ').filter(w => /^[A-Z]/.test(w)).map(w => w[0]).slice(0,2).join('')
 
@@ -112,7 +111,6 @@ function DoctorCard({ doctor, onBook }) {
   )
 }
 
-// ── Main Page ─────────────────────────────────────────────────────────────────
 export default function DoctorFinderPage() {
   const [doctors, setDoctors]       = useState([])
   const [loading, setLoading]       = useState(false)
@@ -139,8 +137,8 @@ export default function DoctorFinderPage() {
     )
   }
 
-  // Fetch on mount and when specialty changes
-  useEffect(() => { fetchDoctors(specialty) }, [specialty]) // eslint-disable-line
+  
+  useEffect(() => { fetchDoctors(specialty) }, [specialty]) 
 
   const filtered = doctors.filter(d =>
     !search || d.name?.toLowerCase().includes(search.toLowerCase()) || d.address?.toLowerCase().includes(search.toLowerCase())
@@ -149,7 +147,7 @@ export default function DoctorFinderPage() {
   return (
     <div className="fade-up" style={{ padding:24, maxWidth:1100, margin:'0 auto' }}>
 
-      {/* Filters */}
+ 
       <div style={{ display:'flex', flexWrap:'wrap', gap:10, marginBottom:20 }}>
         <div style={{ position:'relative', flex:'1 1 220px' }}>
           <Search size={13} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'var(--text-muted)' }} />

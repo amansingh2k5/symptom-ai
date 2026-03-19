@@ -1,7 +1,4 @@
-/**
- * models/Booking.js — Doctor appointment booking.
- * When a booking is created, a confirmation email is sent via Nodemailer.
- */
+
 
 const mongoose = require("mongoose");
 
@@ -13,9 +10,9 @@ const BookingSchema = new mongoose.Schema(
       required: true,
     },
 
-    // Doctor info (from Google Maps Places or your own DB)
+   
     doctor: {
-      placeId:   String,           // Google Maps Place ID
+      placeId:   String,         
       name:      { type: String, required: true },
       specialty: String,
       hospital:  String,
@@ -29,11 +26,11 @@ const BookingSchema = new mongoose.Schema(
     },
 
     appointmentTime: {
-      type: String,                // e.g. "10:30 AM"
+      type: String,                
       required: true,
     },
 
-    reason: String,                // brief description from user
+    reason: String,                
 
     status: {
       type: String,
@@ -41,7 +38,7 @@ const BookingSchema = new mongoose.Schema(
       default: "pending",
     },
 
-    // Track if confirmation email was sent
+    
     emailSent: { type: Boolean, default: false },
   },
   { timestamps: true }

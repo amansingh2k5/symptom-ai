@@ -1,14 +1,3 @@
-/**
- * utils/emailService.js — Nodemailer email sender
- *
- * Uses Gmail as the SMTP transport.
- * All emails use HTML templates defined below.
- *
- * Setup:
- *   1. Enable 2FA on your Gmail account
- *   2. Generate an "App Password" at myaccount.google.com/apppasswords
- *   3. Set EMAIL_USER and EMAIL_PASS in .env
- */
 
 const nodemailer = require("nodemailer");
 
@@ -17,7 +6,7 @@ const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,   // App Password, NOT your Gmail login password
+    pass: process.env.EMAIL_PASS,   
   },
 });
 
@@ -112,7 +101,7 @@ const sendMedicationReminder = async (user, reminder) => {
   });
 };
 
-// ── 4. Password Reset ─────────────────────────────────────────────────────────
+
 const sendPasswordResetEmail = async (user, resetUrl) => {
   const html = htmlWrapper(`
     <h2 style="margin: 0 0 8px; color: #ef4444;">Reset your password</h2>

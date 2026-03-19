@@ -22,7 +22,7 @@ export default function Sidebar({ collapsed, onToggle }) {
   return (
     <aside style={{ width: collapsed ? 68 : 232, minHeight:'100vh', background:'var(--surface)', borderRight:'1px solid var(--border)', display:'flex', flexDirection:'column', transition:'width 0.25s ease', flexShrink:0, overflow:'hidden' }}>
 
-      {/* Logo */}
+     
       <div style={{ display:'flex', alignItems:'center', gap:12, padding:'20px 14px', borderBottom:'1px solid var(--border)' }}>
         <div style={{ width:36, height:36, borderRadius:10, background:'var(--accent)', display:'flex', alignItems:'center', justifyContent:'center', flexShrink:0 }}>
           <Stethoscope size={17} color="#fff" />
@@ -36,7 +36,6 @@ export default function Sidebar({ collapsed, onToggle }) {
         </button>
       </div>
 
-      {/* Nav */}
       <nav style={{ flex:1, padding:'10px 8px', display:'flex', flexDirection:'column', gap:2 }}>
         {NAV.map(({ to, label, icon: Icon }) => (
           <NavLink key={to} to={to} title={collapsed ? label : undefined}
@@ -54,7 +53,7 @@ export default function Sidebar({ collapsed, onToggle }) {
         ))}
       </nav>
 
-      {/* Bottom */}
+     
       <div style={{ borderTop:'1px solid var(--border)', padding:'10px 8px', display:'flex', flexDirection:'column', gap:2 }}>
         <NavLink to="/profile" title={collapsed ? 'Profile' : undefined}
           style={({ isActive }) => ({ display:'flex', alignItems:'center', gap:10, padding:'9px 10px', borderRadius:'var(--radius-sm)', textDecoration:'none', fontSize:13, fontWeight:500, color: isActive ? 'var(--accent)' : 'var(--text-muted)', background: isActive ? 'var(--accent-glow)' : 'transparent', borderLeft: isActive ? '2px solid var(--accent)' : '2px solid transparent' })}>

@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-// ── Find Nearby Doctors ─────────────────────────────
+
 const getNearbyDoctors = async (req, res) => {
   try {
     const { lat, lng, radius = 5000 } = req.query;
@@ -12,7 +12,7 @@ const getNearbyDoctors = async (req, res) => {
       });
     }
 
-    // Overpass API query
+    
     const query = `
       [out:json][timeout:15];
       (
@@ -35,7 +35,7 @@ const getNearbyDoctors = async (req, res) => {
     const doctors = response.data.elements.map((place) => {
       const tags = place.tags || {};
 
-      // Build better address
+      
       const addressParts = [
         tags["addr:housenumber"],
         tags["addr:street"],
@@ -71,7 +71,7 @@ const getNearbyDoctors = async (req, res) => {
   } catch (error) {
     console.error("Doctor API error:", error.message);
 
-    // Prevent frontend crash
+   
     res.json({
       success: true,
       doctors: [],
@@ -79,7 +79,7 @@ const getNearbyDoctors = async (req, res) => {
   }
 };
 
-// ── Doctor Details ─────────────────────────────
+
 const getDoctorDetails = async (req, res) => {
   try {
     const { placeId } = req.params;

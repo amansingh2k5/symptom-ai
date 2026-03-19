@@ -1,6 +1,4 @@
-// ─────────────────────────────────────────────────────────────────────────────
-// components/layout/AppLayout.jsx
-// ─────────────────────────────────────────────────────────────────────────────
+
 import { useState, useEffect, useCallback } from 'react'
 import { Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar'

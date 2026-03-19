@@ -1,6 +1,4 @@
-/**
- * routes/doctorRoutes.js
- */
+
 const express = require("express");
 const router  = express.Router();
 const { getNearbyDoctors, getDoctorDetails } = require("../controllers/doctorController");

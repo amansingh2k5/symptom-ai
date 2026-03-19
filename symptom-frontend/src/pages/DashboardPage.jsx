@@ -84,7 +84,6 @@ export default function DashboardPage() {
   return (
     <div className="fade-up" style={{ padding:24,maxWidth:1100,margin:"0 auto" }}>
 
-      {/* Welcome Banner */}
 
       <GlassCard style={{ marginBottom:20,position:"relative",overflow:"hidden" }}>
 
@@ -116,7 +115,7 @@ export default function DashboardPage() {
 
       </GlassCard>
 
-      {/* Quick Actions */}
+     
 
       <div style={{
         display:"flex",
@@ -137,7 +136,7 @@ export default function DashboardPage() {
         </button>
       </div>
 
-      {/* Health Tip */}
+      
 
       <GlassCard style={{ marginBottom:20 }}>
         <p style={{ fontSize:12,color:"var(--text-muted)",marginBottom:6 }}>
@@ -150,7 +149,6 @@ export default function DashboardPage() {
         </p>
       </GlassCard>
 
-      {/* Stats */}
 
       <div style={{
         display:"grid",
@@ -189,7 +187,7 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* Two Column Layout */}
+    
 
       <div style={{
         display:"grid",
@@ -197,7 +195,6 @@ export default function DashboardPage() {
         gap:16
       }}>
 
-        {/* Recent Checks */}
 
         <GlassCard>
 
@@ -296,7 +293,7 @@ export default function DashboardPage() {
 
         </GlassCard>
 
-        {/* Upcoming Appointments */}
+      
 
         <GlassCard>
 
@@ -395,7 +392,7 @@ export default function DashboardPage() {
 
       </div>
 
-      {/* Disclaimer */}
+     
 
       <div style={{
         display:"flex",
