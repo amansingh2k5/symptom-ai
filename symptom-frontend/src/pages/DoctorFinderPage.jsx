@@ -1,11 +1,17 @@
 import { useState, useEffect } from 'react'
-import { MapPin, Star, Phone, Calendar, Search, X } from 'lucide-react'
+import { MapPin, Star, Phone, Calendar, Search, X, Heart } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { doctorAPI, bookingAPI } from '../services/api'
 import { GlassCard, EmptyState, PageLoader, Spinner } from '../components/ui'
 
 const SPECIALTIES = ['All','General Physician','Cardiologist','Neurologist','Pulmonologist','ENT Specialist']
 
+const getSavedDoctors = () => {
+  try { return JSON.parse(localStorage.getItem('savedDoctors') || '[]') } catch { return [] }
+}
+const setSavedDoctorsStorage = (docs) => {
+  localStorage.setItem('savedDoctors', JSON.stringify(docs))
+}
 
 function BookingModal({ doctor, onClose }) {
   const [form, setForm]       = useState({ appointmentDate:'', appointmentTime:'', reason:'' })
@@ -56,7 +62,7 @@ function BookingModal({ doctor, onClose }) {
   )
 }
 
-function DoctorCard({ doctor, onBook }) {
+function DoctorCard({ doctor, onBook, saved, onToggleSave }) {
   const initials = (doctor.name || 'DR').split(' ').filter(w => /^[A-Z]/.test(w)).map(w => w[0]).slice(0,2).join('')
 
   return (
@@ -101,6 +107,20 @@ function DoctorCard({ doctor, onBook }) {
         <button className="btn-primary" onClick={() => onBook(doctor)} style={{ flex:1, justifyContent:'center', padding:'8px 12px', fontSize:12 }}>
           <Calendar size={13} /> Book
         </button>
+        <button
+          onClick={() => onToggleSave(doctor)}
+          title={saved ? 'Unsave doctor' : 'Save doctor'}
+          style={{
+            padding:'8px 14px', borderRadius:8, cursor:'pointer', border:'1px solid',
+            borderColor: saved ? 'rgba(239,68,68,0.4)' : 'var(--border)',
+            background:  saved ? 'rgba(239,68,68,0.1)' : 'transparent',
+            color:       saved ? 'var(--red)'           : 'var(--text-muted)',
+            display:'flex', alignItems:'center', justifyContent:'center',
+            transition:'all 0.15s',
+          }}
+        >
+          <Heart size={14} fill={saved ? 'currentColor' : 'none'} />
+        </button>
         {doctor.phone && (
           <a href={`tel:${doctor.phone}`} className="btn-ghost" style={{ padding:'8px 14px', textDecoration:'none', fontSize:12 }}>
             <Phone size={13} />
@@ -118,6 +138,23 @@ export default function DoctorFinderPage() {
   const [search, setSearch]         = useState('')
   const [specialty, setSpecialty]   = useState('All')
   const [bookingDoc, setBookingDoc] = useState(null)
+  const [savedDoctors, setSavedDoctors] = useState(getSavedDoctors)
+
+  const toggleSave = (doctor) => {
+    const id = doctor.placeId || doctor.name
+    const isAlreadySaved = savedDoctors.some(d => (d.placeId || d.name) === id)
+    const updated = isAlreadySaved
+      ? savedDoctors.filter(d => (d.placeId || d.name) !== id)
+      : [...savedDoctors, doctor]
+    setSavedDoctors(updated)
+    setSavedDoctorsStorage(updated)
+    toast.success(isAlreadySaved ? 'Doctor removed from saved' : 'Doctor saved!')
+  }
+
+  const isSaved = (doctor) => {
+    const id = doctor.placeId || doctor.name
+    return savedDoctors.some(d => (d.placeId || d.name) === id)
+  }
 
   const fetchDoctors = (spec = specialty) => {
     setLoading(true); setLocErr('')
@@ -137,8 +174,7 @@ export default function DoctorFinderPage() {
     )
   }
 
-  
-  useEffect(() => { fetchDoctors(specialty) }, [specialty]) 
+  useEffect(() => { fetchDoctors(specialty) }, [specialty])
 
   const filtered = doctors.filter(d =>
     !search || d.name?.toLowerCase().includes(search.toLowerCase()) || d.address?.toLowerCase().includes(search.toLowerCase())
@@ -147,7 +183,6 @@ export default function DoctorFinderPage() {
   return (
     <div className="fade-up" style={{ padding:24, maxWidth:1100, margin:'0 auto' }}>
 
- 
       <div style={{ display:'flex', flexWrap:'wrap', gap:10, marginBottom:20 }}>
         <div style={{ position:'relative', flex:'1 1 220px' }}>
           <Search size={13} style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)', color:'var(--text-muted)' }} />
@@ -180,7 +215,15 @@ export default function DoctorFinderPage() {
           ? <EmptyState icon={MapPin} title="No doctors found" description="Try a different search term or specialty."
               action={<button className="btn-primary" onClick={() => fetchDoctors()}>Retry</button>} />
           : <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(280px,1fr))', gap:14 }}>
-              {filtered.map((doc, i) => <DoctorCard key={doc.placeId || i} doctor={doc} onBook={setBookingDoc} />)}
+              {filtered.map((doc, i) => (
+                <DoctorCard
+                  key={doc.placeId || i}
+                  doctor={doc}
+                  onBook={setBookingDoc}
+                  saved={isSaved(doc)}
+                  onToggleSave={toggleSave}
+                />
+              ))}
             </div>
       }
 
